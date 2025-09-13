@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import expenseRoutes from "./routes/expenseRoutes.js";
-import authRoutes from "./routes/authRoutes.js"; // 👈 added
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 app.get("/api/health", (req, res) => {
   res.json({ message: "✅ Backend is running 🚀" });
 });
-app.use("/api/auth", authRoutes);      // 👈 new auth routes
+app.use("/api/auth", authRoutes);
 app.use("/api/expenses", expenseRoutes);
 
 // MongoDB Connection
@@ -32,8 +32,10 @@ mongoose
   })
   .then(() => {
     console.log("✅ MongoDB Connected");
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on http://localhost:${PORT}`)
+
+    // ✅ Railway requires listening on 0.0.0.0
+    app.listen(PORT, "0.0.0.0", () =>
+      console.log(`🚀 Server running on port ${PORT}`)
     );
   })
   .catch((err) => {
